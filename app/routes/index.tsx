@@ -1,7 +1,13 @@
+import { LinksFunction } from "@remix-run/server-runtime";
+import tailwindUrl from "../styles/app.css";
+
+export let links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: tailwindUrl }];
+};
 export default function Index() {
   return (
     <div>
-      <h1 className="bg-[red] text-[25px]">Welcome to Remix</h1>
+      <p className="text-secondary text-[25px]">Welcome to Remix</p>
     </div>
   );
 }
