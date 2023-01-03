@@ -1,4 +1,4 @@
-# Remix Blues Stack
+# Welcome in Redash with Remix Blues Stack
 
 Dashboard per richiesta di mentorship.
 Ci sono vari mentor disponibile (nome, cognome, esperienza) con questi è possibile fissare delle ore pagate in token ‘ore/lavoro’). I token si possono acquisire solo lavorando o rispondendo per dare mentorship. Inoltre in base all’utilizzo dell’applicazione (pubblicazione di task nel proprio team, segnare ore di lavoro ecc.) i token vengono caricati.
@@ -16,10 +16,6 @@ Funzionalità:
 - scegliere i mentor, fissare call con loro
 - Token se si lavora (quindi si segnano le ore di lavoro) vengono distribuiti.
 - chat privata
-
-![The Remix Blues Stack](https://repository-images.githubusercontent.com/461012689/37d5bd8b-fa9c-4ab0-893c-f0a199d5012d)
-
-Learn more about [Remix Stacks](https://remix.run/stacks).
 
 ```
 npx create-remix@latest --template remix-run/blues-stack
