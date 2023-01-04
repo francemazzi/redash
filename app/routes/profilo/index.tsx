@@ -1,7 +1,8 @@
-import React from "react";
-import type { LoaderArgs } from "@remix-run/node";
+import React, { useState } from "react";
+import type { ActionArgs, LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
+import { safeRedirect, validateEmail } from "~/utils";
 
 import { getNoteListItems } from "~/models/note.server";
 import { requireUserId } from "~/session.server";
@@ -16,7 +17,19 @@ export async function loader({ request }: LoaderArgs) {
   return json({ noteListItems });
 }
 
+//form
+export async function action({ request }: ActionArgs) {
+  const formData = await request.formData();
+  const skill = formData.get("skill");
+  const experince = formData.get("experince");
+  const yearExperience = formData.get("yearExperience");
+  const ruolo = formData.get("ruolo");
+  const redirectTo = safeRedirect(formData.get("redirectTo"), "/");
+  const remember = formData.get("remember");
+}
+
 const Profilo = () => {
+  const data = useLoaderData<typeof loader>();
   const user = useUser();
   //ref
   const skillRef = React.useRef<HTMLInputElement>(null);
@@ -25,12 +38,10 @@ const Profilo = () => {
   const ruoloRef = React.useRef<HTMLInputElement>(null);
 
   // stato
-  // const [skill, setSkill] = useState();
-  // const [Experince, setExperince] = useState();
-  // const [yearExperience, setYearExperience] = useState();
-  // const [ruolo, setRuolo] = useState();
-
-  const data = useLoaderData<typeof loader>();
+  const [skill, setSkill] = useState();
+  const [Experince, setExperince] = useState();
+  const [yearExperience, setYearExperience] = useState();
+  const [ruolo, setRuolo] = useState();
 
   return (
     <div>
@@ -134,6 +145,3 @@ const Profilo = () => {
 };
 
 export default Profilo;
-function useState(): [any, any] {
-  throw new Error("Function not implemented.");
-}

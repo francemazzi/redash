@@ -8,3 +8,11 @@ export interface UserInterface {
 export type UserType = {
   user?: UserInterface;
 };
+
+// export type UserCreate = {
+//   email: string;
+//   skill: string;
+//   experince: string;
+//   yearExperience: string;
+//   ruolo: string;
+// };

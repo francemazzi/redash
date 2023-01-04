@@ -16,7 +16,10 @@ export async function loader({ request }: LoaderArgs) {
 
 export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
+
   const email = formData.get("email");
+  const skill = formData.get("skill");
+  const experience = formData.get("experience");
   const password = formData.get("password");
   const redirectTo = safeRedirect(formData.get("redirectTo"), "/");
 
@@ -53,8 +56,8 @@ export async function action({ request }: ActionArgs) {
       { status: 400 }
     );
   }
-
-  const user = await createUser(email, password);
+  console.log(formData);
+  const user = await createUser(email, experience, skill, password);
 
   return createUserSession({
     request,
@@ -71,6 +74,10 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Join() {
+  //ref
+  const skillRef = React.useRef<HTMLInputElement>(null);
+  const experienceRef = React.useRef<HTMLInputElement>(null);
+
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get("redirectTo") ?? undefined;
   const actionData = useActionData<typeof action>();
@@ -142,7 +149,49 @@ export default function Join() {
               )}
             </div>
           </div>
-
+          {/* Skill*/}
+          <label
+            htmlFor="skill"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Inserisci le tue skill
+          </label>
+          <div className="mt-1">
+            <input
+              ref={skillRef}
+              id="skill"
+              required
+              autoFocus={true}
+              name="skill"
+              type="string"
+              autoComplete="skill"
+              // aria-invalid={actionData?.errors?.email ? true : undefined}
+              aria-describedby="skill-error"
+              className="my-2 w-full rounded border border-gray-500 px-2 py-1 text-lg"
+            />
+          </div>
+          {/* Experience */}
+          <label
+            htmlFor="experience"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Inserisci la esperienza
+          </label>
+          <div className="mt-1">
+            <input
+              ref={experienceRef}
+              id="experience"
+              required
+              autoFocus={true}
+              name="experience"
+              type="string"
+              autoComplete="experience"
+              placeholder="Tipo di esperienza"
+              // aria-invalid={actionData?.errors?.email ? true : undefined}
+              aria-describedby="experience-error"
+              className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+            />
+          </div>
           <input type="hidden" name="redirectTo" value={redirectTo} />
           <button
             type="submit"

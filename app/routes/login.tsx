@@ -64,6 +64,7 @@ export const meta: MetaFunction = () => {
   };
 };
 
+// login
 export default function LoginPage() {
   const [searchParams] = useSearchParams();
   const redirectTo = searchParams.get("redirectTo") || "/dashboard";
