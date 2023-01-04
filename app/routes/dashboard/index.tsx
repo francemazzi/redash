@@ -7,7 +7,7 @@ import { getNoteListItems } from "~/models/note.server";
 import { requireUserId } from "~/session.server";
 
 //componets
-import Header from "~/components/header";
+import Header from "~/components/molecols/header";
 
 export async function loader({ request }: LoaderArgs) {
   const userId = await requireUserId(request);

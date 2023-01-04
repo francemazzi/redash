@@ -8,7 +8,7 @@ import { requireUserId } from "~/session.server";
 import { useUser } from "~/utils";
 
 //common type
-import type { UserType } from "../../../common/types";
+import type { UserType } from "../../../../common/types";
 
 export async function loader({ request }: LoaderArgs) {
   const userId = await requireUserId(request);

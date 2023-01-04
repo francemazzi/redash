@@ -8,7 +8,7 @@ import { requireUserId } from "~/session.server";
 import { useUser } from "~/utils";
 
 //common type
-import Header from "~/components/header";
+import Header from "~/components/molecols/header";
 
 export async function loader({ request }: LoaderArgs) {
   const userId = await requireUserId(request);
@@ -36,7 +36,7 @@ const Profilo = () => {
     <div>
       {/* HEADER */}
       <Header />
-      <p className="text-center">{user.email}</p>
+      <p className="p-2 text-center">Bentoranto! {user.email}</p>
 
       {/* form richiesta dati */}
       <div className="p-[5px]">
