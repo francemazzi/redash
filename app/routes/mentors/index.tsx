@@ -9,7 +9,9 @@ export default function Mentors({}: Props) {
     <div>
       {/* HEADER */}
       <Header />
-      <h1>Scegli tra i migliori mentors disponibili</h1>
+      <h1 className="p-4 text-center text-[18px] font-semibold">
+        Scegli tra i migliori mentors disponibili
+      </h1>
       {/* Elenco dei mentors */}
       <MentorsCard />
     </div>
