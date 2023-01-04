@@ -18,6 +18,11 @@ model User {
   notes    Note[]
 }
 
+    //skill
+  //Experince
+  //yearExperience
+  //ruolo
+
 model Password {
   hash String
 
