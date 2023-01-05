@@ -14,14 +14,19 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  skillList  Skill[]
+  experince String?
+  yearExperience String?
+  ruolo String?
+
   password Password?
   notes    Note[]
 }
 
-    //skill
-  //Experince
-  //yearExperience
-  //ruolo
+model Skill {
+  skill String?
+}
+
 
 model Password {
   hash String
@@ -41,3 +46,4 @@ model Note {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String
 }
+
