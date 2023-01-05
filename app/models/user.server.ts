@@ -1,4 +1,4 @@
-import type { Password, Skill, SkillsOnUsers, User } from "@prisma/client";
+import type { Password, User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 import { prisma } from "~/db.server";
@@ -37,6 +37,12 @@ export async function createUser(
       experince,
       yearExperience,
       ruolo,
+      // skills: {
+      //   create: [
+      //     { skill: 'frontender' },
+      //     { skill: 'backender' },
+      //   ],
+      // },
     },
   });
 }

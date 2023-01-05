@@ -1,7 +1,14 @@
 import React from "react";
-import type { LoaderArgs } from "@remix-run/node";
+import type { ActionArgs, LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Form, Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
+import {
+  Form,
+  Link,
+  NavLink,
+  Outlet,
+  useActionData,
+  useLoaderData,
+} from "@remix-run/react";
 
 import { getNoteListItems } from "~/models/note.server";
 import { requireUserId } from "~/session.server";
@@ -9,6 +16,7 @@ import { useUser } from "~/utils";
 
 //common type
 import Header from "~/components/molecols/header";
+import { createUser } from "~/models/user.server";
 
 export async function loader({ request }: LoaderArgs) {
   const userId = await requireUserId(request);
@@ -16,21 +24,41 @@ export async function loader({ request }: LoaderArgs) {
   return json({ noteListItems });
 }
 
+// export async function action({ request }: ActionArgs) {
+//   const userId = await requireUserId(request);
+//   const formData = await request.formData();
+//   const skill = formData.get("skill");
+//   const experience = formData.get("experience");
+//   const yearExperience = formData.get("yearExperience");
+//   const ruolo = formData.get("ruolo");
+
+//nuova funzione che aggiorna il profilo
+
+// const profile = await createUser({ skill, experience, yearExperience, ruolo });
+// }
+
 const Profilo = () => {
   const user = useUser();
+  // const actionData = useActionData<typeof action>();
+
+  const data = useLoaderData<typeof loader>();
   //ref
   const skillRef = React.useRef<HTMLInputElement>(null);
   const experienceRef = React.useRef<HTMLInputElement>(null);
   const yearExperienceRef = React.useRef<HTMLInputElement>(null);
   const ruoloRef = React.useRef<HTMLInputElement>(null);
 
-  // stato
-  // const [skill, setSkill] = useState();
-  // const [Experince, setExperince] = useState();
-  // const [yearExperience, setYearExperience] = useState();
-  // const [ruolo, setRuolo] = useState();
-
-  const data = useLoaderData<typeof loader>();
+  // React.useEffect(() => {
+  //   if (actionData?.errors?.title) {
+  //     skillRef.current?.focus();
+  //   } else if (actionData?.errors?.body) {
+  //     experienceRef.current?.focus();
+  //   } else if (actionData?.errors?.body) {
+  //     yearExperienceRef.current?.focus();
+  //   } else if (actionData?.errors?.body) {
+  //     ruoloRef.current?.focus();
+  //   }
+  // }, [actionData]);
 
   return (
     <div>
