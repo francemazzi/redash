@@ -21,16 +21,25 @@ model User {
   yearExperience String?
   ruolo String?
 
-  skillList  Skill[]
+  skills  SkillsOnUsers[]
 }
 
 model Skill {
   id    String @id @default(cuid())
   skill String?
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  userId   String  
+  users  SkillsOnUsers[]
 }
 
+model SkillsOnUsers {
+  user   User   @relation(fields: [userId], references: [id]) //, onDelete: Cascade, onUpdate: Cascade
+  userId   String  
+  skill   Skill @relation(fields: [skillId], references: [id])
+  skillId String 
+  assignedAt DateTime @default(now())
+  assignedBy String
+
+  @@id([userId, skillId])
+}
 
 model Password {
   hash String
