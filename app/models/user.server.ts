@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 
 import { prisma } from "~/db.server";
 
-export type { User } from "@prisma/client";
+export type { User, Skill, SkillsOnUsers } from "@prisma/client";
 
 export async function getUserById(id: User["id"]) {
   return prisma.user.findUnique({ where: { id } });
@@ -37,12 +37,27 @@ export async function createUser(
       experince,
       yearExperience,
       ruolo,
-      // skills: {
-      //   create: [
-      //     { skill: 'frontender' },
-      //     { skill: 'backender' },
-      //   ],
-      // },
+    },
+  });
+}
+
+//update ruole and experince
+export async function updateProfile(
+  experince: User["experince"],
+  yearExperience: User["yearExperience"],
+  ruolo: User["ruolo"],
+  id: User["id"]
+  // skills: User["skills"]
+) {
+  return prisma.user.update({
+    data: {
+      experince,
+      yearExperience,
+      ruolo,
+      // skills,
+    },
+    where: {
+      id,
     },
   });
 }

@@ -1,5 +1,6 @@
 import React from "react";
-import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import { ActionArgs, LoaderArgs, redirect } from "@remix-run/node";
+import { prisma } from "~/db.server";
 import { json } from "@remix-run/node";
 import {
   Form,
@@ -14,9 +15,12 @@ import { getNoteListItems } from "~/models/note.server";
 import { requireUserId } from "~/session.server";
 import { useUser } from "~/utils";
 
+//test zod
+import { z } from "zod";
+
 //common type
 import Header from "~/components/molecols/header";
-import { createUser } from "~/models/user.server";
+import { createUser, updateProfile, verifyLogin } from "~/models/user.server";
 
 export async function loader({ request }: LoaderArgs) {
   const userId = await requireUserId(request);
@@ -24,22 +28,43 @@ export async function loader({ request }: LoaderArgs) {
   return json({ noteListItems });
 }
 
-// export async function action({ request }: ActionArgs) {
-//   const userId = await requireUserId(request);
-//   const formData = await request.formData();
-//   const skill = formData.get("skill");
-//   const experience = formData.get("experience");
-//   const yearExperience = formData.get("yearExperience");
-//   const ruolo = formData.get("ruolo");
+//create schema with zod
 
-//nuova funzione che aggiorna il profilo
+export async function action({ request }: ActionArgs) {
+  const userId = await requireUserId(request);
+  const formData = await request.formData();
 
-// const profile = await createUser({ skill, experience, yearExperience, ruolo });
-// }
+  //dati del form
+  const form = Object.fromEntries(formData.entries());
+
+  const skill = formData.get("skill");
+  const experience = formData.get("experience")?.toString() || null;
+  const yearExperience = formData.get("yearExperience")?.toString() || null;
+  const ruolo = formData.get("ruolo")?.toString() || null;
+
+  console.log(typeof experience);
+
+  //nuova funzione che aggiorna il profilo
+  // prisma.user.create({
+  //   data: {
+  //     data
+  //   }
+  // })
+
+  const profile = await updateProfile(
+    experience,
+    yearExperience,
+    ruolo,
+    userId
+  );
+
+  // return redirect("/dashboard");
+  return null;
+}
 
 const Profilo = () => {
   const user = useUser();
-  // const actionData = useActionData<typeof action>();
+  const actionData = useActionData<typeof action>();
 
   const data = useLoaderData<typeof loader>();
   //ref
@@ -48,6 +73,7 @@ const Profilo = () => {
   const yearExperienceRef = React.useRef<HTMLInputElement>(null);
   const ruoloRef = React.useRef<HTMLInputElement>(null);
 
+  //ERRORS
   // React.useEffect(() => {
   //   if (actionData?.errors?.title) {
   //     skillRef.current?.focus();
@@ -83,7 +109,7 @@ const Profilo = () => {
               required
               autoFocus={true}
               name="skill"
-              type="skill"
+              type="text"
               autoComplete="skill"
               // aria-invalid={actionData?.errors?.email ? true : undefined}
               aria-describedby="skill-error"
@@ -104,7 +130,7 @@ const Profilo = () => {
               required
               autoFocus={true}
               name="experience"
-              type="experience"
+              type="text"
               autoComplete="experience"
               placeholder="Tipo di esperienza"
               // aria-invalid={actionData?.errors?.email ? true : undefined}
@@ -117,7 +143,7 @@ const Profilo = () => {
               required
               autoFocus={true}
               name="yearExperience"
-              type="yearExperience"
+              type="text"
               autoComplete="yearExperience"
               placeholder="Anni passati a farla"
               // aria-invalid={actionData?.errors?.email ? true : undefined}
@@ -130,7 +156,7 @@ const Profilo = () => {
             htmlFor="ruolo"
             className="block text-sm font-medium text-gray-700"
           >
-            Inserisci le tue skill
+            Inserisci il tuo ruolo
           </label>
           <div className="mt-1">
             <input
@@ -139,7 +165,7 @@ const Profilo = () => {
               required
               autoFocus={true}
               name="ruolo"
-              type="ruolo"
+              type="text"
               autoComplete="ruolo"
               // aria-invalid={actionData?.errors?.email ? true : undefined}
               aria-describedby="ruolo-error"

@@ -20,8 +20,7 @@ model User {
   experince String?
   yearExperience String?
   ruolo String?
-
-  skills  SkillsOnUsers[]
+  skills  SkillsOnUsers[] 
 }
 
 model Skill {
@@ -31,10 +30,10 @@ model Skill {
 }
 
 model SkillsOnUsers {
-  user   User   @relation(fields: [userId], references: [id]) //, onDelete: Cascade, onUpdate: Cascade
   userId   String  
-  skill   Skill @relation(fields: [skillId], references: [id])
+  user   User   @relation(fields: [userId], references: [id]) //, onDelete: Cascade, onUpdate: Cascade
   skillId String 
+  skill   Skill @relation(fields: [skillId], references: [id])
   assignedAt DateTime @default(now())
   assignedBy String
 
