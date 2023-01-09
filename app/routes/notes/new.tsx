@@ -32,6 +32,8 @@ export async function action({ request }: ActionArgs) {
   return redirect(`/notes/${note.id}`);
 }
 
+//TODO: inserire datti login -> skill experience, yearExperience, ruolo
+
 export default function NewNotePage() {
   const actionData = useActionData<typeof action>();
   const titleRef = React.useRef<HTMLInputElement>(null);

@@ -16,12 +16,29 @@ model User {
 
   password Password?
   notes    Note[]
+
+  experince String?
+  yearExperience String?
+  ruolo String?
+  skills  SkillsOnUsers[] 
 }
 
-    //skill
-  //Experince
-  //yearExperience
-  //ruolo
+model Skill {
+  id    String @id @default(cuid())
+  skill String?
+  users  SkillsOnUsers[]
+}
+
+model SkillsOnUsers {
+  userId   String  
+  user   User   @relation(fields: [userId], references: [id]) //, onDelete: Cascade, onUpdate: Cascade
+  skillId String 
+  skill   Skill @relation(fields: [skillId], references: [id])
+  assignedAt DateTime @default(now())
+  assignedBy String
+
+  @@id([userId, skillId])
+}
 
 model Password {
   hash String
@@ -41,3 +58,4 @@ model Note {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String
 }
+

@@ -142,6 +142,29 @@ Now that everything is set up you can commit and push your changes to your repo.
 
 If you run into any issues deploying to Fly, make sure you've followed all of the steps above and if you have, then post as many details about your deployment (including your app name) to [the Fly support community](https://community.fly.io). They're normally pretty responsive over there and hopefully can help resolve any of your deployment issues and questions.
 
+## Modify data in database
+
+1. update our Prisma schema
+2. tell Prisma to update our local database and TypeScript definitions to match this schema change:
+
+```sh
+npx prisma db push
+```
+
+3.  Let's get those posts into the database with the seed script:
+
+```sh
+npx prisma db seed
+```
+
+4. Let's generate a migration file for our schema changes - which will be required if you deploy your application rather than just running in dev mode locally:
+
+```sh
+npx prisma migrate dev
+```
+
+5. update the app/models/post.server.ts file to read from the SQLite database
+
 ### Multi-region deploys
 
 Once you have your site and database running in a single region, you can add more regions by following [Fly's Scaling](https://fly.io/docs/reference/scaling/) and [Multi-region PostgreSQL](https://fly.io/docs/getting-started/multi-region-databases/) docs.
