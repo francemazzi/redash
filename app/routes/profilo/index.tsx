@@ -1,5 +1,6 @@
 import React from "react";
-import { ActionArgs, LoaderArgs, redirect } from "@remix-run/node";
+import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import { redirect } from "@remix-run/node";
 import { prisma } from "~/db.server";
 import { json } from "@remix-run/node";
 import {
@@ -20,12 +21,18 @@ import { z } from "zod";
 
 //common type
 import Header from "~/components/molecols/header";
-import { createUser, updateProfile, verifyLogin } from "~/models/user.server";
+import {
+  createSkill,
+  createUser,
+  getSkillListItems,
+  updateProfile,
+  verifyLogin,
+} from "~/models/user.server";
 
 export async function loader({ request }: LoaderArgs) {
   const userId = await requireUserId(request);
-  const noteListItems = await getNoteListItems({ userId });
-  return json({ noteListItems });
+  const skilList = await getSkillListItems({ userId });
+  return json({ skilList });
 }
 
 //create schema with zod
@@ -37,12 +44,10 @@ export async function action({ request }: ActionArgs) {
   //dati del form
   const form = Object.fromEntries(formData.entries());
 
-  const skill = formData.get("skill");
+  const skill = formData.get("skill")?.toString() || null;
   const experience = formData.get("experience")?.toString() || null;
   const yearExperience = formData.get("yearExperience")?.toString() || null;
   const ruolo = formData.get("ruolo")?.toString() || null;
-
-  console.log(typeof experience);
 
   //nuova funzione che aggiorna il profilo
   // prisma.user.create({
@@ -50,6 +55,8 @@ export async function action({ request }: ActionArgs) {
   //     data
   //   }
   // })
+
+  const skills = await createSkill(skill, userId);
 
   const profile = await updateProfile(
     experience,
@@ -64,6 +71,7 @@ export async function action({ request }: ActionArgs) {
 
 const Profilo = () => {
   const user = useUser();
+  // const skill = us
   const actionData = useActionData<typeof action>();
 
   const data = useLoaderData<typeof loader>();
@@ -91,7 +99,34 @@ const Profilo = () => {
       {/* HEADER */}
       <Header />
       <p className="p-2 text-center">Bentoranto! {user.email}</p>
-
+      <p className="p-2 text-center">
+        La tua in anni: {user.yearExperience} {user.experince}
+      </p>
+      <p className="p-2 text-center">
+        La ultima esperienza è stata: {user.experince}
+      </p>
+      <p className="p-2 text-center">Pra il tuo ruol è: {user.ruolo}</p>
+      <p className="p-2 text-center">Skill:</p>
+      {data.skilList.length === 0 ? (
+        <p className="w-[10rem] rounded-md p-4 text-center shadow-md">
+          Skill da inserire
+        </p>
+      ) : (
+        <ol>
+          {data.skilList.map((skill) => (
+            <li key={skill.id}>
+              <NavLink
+                className={({ isActive }) =>
+                  `block border-b p-4 text-xl ${isActive ? "bg-white" : ""}`
+                }
+                to={skill.id}
+              >
+                {skill.name}
+              </NavLink>
+            </li>
+          ))}
+        </ol>
+      )}
       {/* form richiesta dati */}
       <div className="p-[5px]">
         <Form method="post" className="space-y-6" noValidate>
@@ -188,6 +223,3 @@ const Profilo = () => {
 };
 
 export default Profilo;
-function useState(): [any, any] {
-  throw new Error("Function not implemented.");
-}

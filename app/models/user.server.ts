@@ -1,9 +1,9 @@
-import type { Password, User } from "@prisma/client";
+import type { Password, Skill, User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 import { prisma } from "~/db.server";
 
-export type { User, Skill, SkillsOnUsers } from "@prisma/client";
+export type { User, Skill } from "@prisma/client";
 
 export async function getUserById(id: User["id"]) {
   return prisma.user.findUnique({ where: { id } });
@@ -13,9 +13,9 @@ export async function getUserByEmail(email: User["email"]) {
   return prisma.user.findUnique({ where: { email } });
 }
 
-export async function getSkillByUser(user: User["id"]) {
-  return prisma.skillsOnUsers.findMany({ where: { userId: user } });
-}
+// export async function getSkillByUser(user: User["id"]) {
+//   return prisma.skillsOnUsers.findMany({ where: { userId: user } });
+// }
 
 export async function createUser(
   email: User["email"],
@@ -47,18 +47,40 @@ export async function updateProfile(
   yearExperience: User["yearExperience"],
   ruolo: User["ruolo"],
   id: User["id"]
-  // skills: User["skills"]
 ) {
   return prisma.user.update({
     data: {
       experince,
       yearExperience,
       ruolo,
-      // skills,
     },
     where: {
       id,
     },
+  });
+}
+
+export function createSkill(
+  name: Skill["name"],
+
+  userId: Skill["userId"]
+) {
+  return prisma.skill.create({
+    data: {
+      name,
+      user: {
+        connect: {
+          id: userId,
+        },
+      },
+    },
+  });
+}
+
+export function getSkillListItems({ userId }: { userId: User["id"] }) {
+  return prisma.skill.findMany({
+    where: { userId },
+    select: { id: true, name: true },
   });
 }
 
